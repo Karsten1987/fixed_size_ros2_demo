@@ -3,6 +3,9 @@
 template<class MsgT, size_t width = MsgT::WIDTH, size_t height = MsgT::HEIGHT>
 void show_image(std::shared_ptr<MsgT> image)
 {
+  RCLCPP_INFO(
+    rclcpp::get_logger("image_transport_subscriber"),
+    "Subscribing to message on address %p", image.get());
   cv::Mat frame(height, width, CV_8UC3, image.get()->data.data());
   cv::imshow("burger_subscriber", frame);
   cv::waitKey(1);

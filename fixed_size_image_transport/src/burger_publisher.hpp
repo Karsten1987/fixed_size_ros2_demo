@@ -29,6 +29,7 @@ public:
       image_msg.get().is_bigendian = false;
       image_msg.get().step = frame.step[0];
       memcpy(image_msg.get().data.data(), frame.data, frame_size);
+      RCLCPP_INFO(logger_, "Publishing message on address %p", &image_msg.get());
       pub_->publish(std::move(image_msg));
       loop_rate.sleep();
     }
