@@ -13,6 +13,8 @@ public:
 
   void run(double frequency)
   {
+    static size_t count = 0;
+
     rclcpp::WallRate loop_rate(frequency);
 
     while (rclcpp::ok()) {
@@ -27,9 +29,9 @@ public:
         return;
       }
       image_msg.get().is_bigendian = false;
-      image_msg.get().step = frame.step[0];
+      image_msg.get().step = count++;
       memcpy(image_msg.get().data.data(), frame.data, frame_size);
-      RCLCPP_INFO(logger_, "Publishing message on address %p", &image_msg.get());
+      RCLCPP_INFO(logger_, "Publishing message %zu on address %p", count, &image_msg.get());
       pub_->publish(std::move(image_msg));
       loop_rate.sleep();
     }
