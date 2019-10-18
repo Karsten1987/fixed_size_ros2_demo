@@ -22,6 +22,7 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(std_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/Image4k.msg"
   "msg/Image1080p.msg"
   "msg/Image720p.msg"
   "msg/ImageVGA.msg"

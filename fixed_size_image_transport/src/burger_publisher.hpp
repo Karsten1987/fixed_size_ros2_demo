@@ -15,6 +15,7 @@
 #ifndef BURGER_PUBLISHER_HPP_
 #define BURGER_PUBLISHER_HPP_
 
+#include <inttypes.h>
 #include <memory>
 #include <string>
 #include <utility>
@@ -52,7 +53,10 @@ public:
       image_msg.get().is_bigendian = false;
       image_msg.get().step = ++count;
       memcpy(image_msg.get().data.data(), frame.data, frame_size);
-      RCLCPP_INFO(logger_, "Publishing message %zu on address %p", count, &image_msg.get());
+      image_msg.get().timestamp = std::chrono::duration_cast<std::chrono::nanoseconds>(
+        std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+      RCLCPP_INFO(logger_, "[%" PRId64 "]Publishing message %zu on address %p",
+        image_msg.get().timestamp, count, &image_msg.get());
       pub_->publish(std::move(image_msg));
       loop_rate.sleep();
     }

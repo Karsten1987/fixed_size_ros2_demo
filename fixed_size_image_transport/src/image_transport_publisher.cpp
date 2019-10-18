@@ -15,6 +15,7 @@
 #include <memory>
 #include <string>
 
+#include "fixed_size_msgs/msg/image4k.hpp"
 #include "fixed_size_msgs/msg/image1080p.hpp"
 #include "fixed_size_msgs/msg/image720p.hpp"
 #include "fixed_size_msgs/msg/image_vga.hpp"
@@ -54,10 +55,13 @@ int main(int argc, char ** argv)
   } else if (image_id == "1080p") {
     BurgerPublisher<fixed_size_msgs::msg::Image1080p> pub(node, "image1080p");
     pub.run(frequency);
+  } else if (image_id == "4k") {
+    BurgerPublisher<fixed_size_msgs::msg::Image4k> pub(node, "image4k");
+    pub.run(frequency);
   } else {
     RCLCPP_ERROR(
       node->get_logger(),
-      "unsupported image id: %s - choose from ('VGA', '720p', '1080p'", image_id.c_str());
+      "unsupported image id: %s - choose from ('VGA', '720p', '1080p', '4k'", image_id.c_str());
     return -1;
   }
 
