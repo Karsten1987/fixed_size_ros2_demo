@@ -1,3 +1,24 @@
+// Copyright (c) 2019 by Robert Bosch GmbH. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#ifndef BURGER_PUBLISHER_HPP_
+#define BURGER_PUBLISHER_HPP_
+
+#include <memory>
+#include <string>
+#include <utility>
+
 #include "rclcpp/rclcpp.hpp"
 
 #include "./burger.hpp"
@@ -29,7 +50,7 @@ public:
         return;
       }
       image_msg.get().is_bigendian = false;
-      image_msg.get().step = count++;
+      image_msg.get().step = ++count;
       memcpy(image_msg.get().data.data(), frame.data, frame_size);
       RCLCPP_INFO(logger_, "Publishing message %zu on address %p", count, &image_msg.get());
       pub_->publish(std::move(image_msg));
@@ -42,3 +63,5 @@ private:
   rclcpp::Logger logger_;
   burger::Burger burger_cap_;
 };
+
+#endif  // BURGER_PUBLISHER_HPP_
