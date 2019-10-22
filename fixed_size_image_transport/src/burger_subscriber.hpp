@@ -41,7 +41,8 @@ public:
   {
     auto logger = rclcpp::get_logger("image_transport_subscriber");
     RCLCPP_INFO(logger, "Received %" PRId64 " messages", k_);
-    RCLCPP_INFO(logger, "Average round time %f milliseconds", float(average_round_time_)/1e6);
+    RCLCPP_INFO(
+      logger, "Average round time %f milliseconds", static_cast<float>(average_round_time_) / 1e6);
   }
 
   void show_image(std::shared_ptr<MsgT> image)

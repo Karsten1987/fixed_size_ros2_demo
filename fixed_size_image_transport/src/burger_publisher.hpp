@@ -43,7 +43,7 @@ public:
       auto frame = burger_cap_.render_burger(width, height);
       auto frame_size = static_cast<size_t>(frame.step[0] * frame.rows);
 
-      auto image_msg = pub_->loan_message();
+      auto image_msg = pub_->borrow_loaned_message();
       auto msg_size = image_msg.get().data.size();
       if (frame_size != msg_size) {
         RCLCPP_ERROR(
