@@ -47,15 +47,17 @@ public:
 
   void show_image(std::shared_ptr<MsgT> image)
   {
-    auto logger = rclcpp::get_logger("image_transport_subscriber");
-    RCLCPP_INFO(
-      logger,
-      "Subscribing to message %zu on address %p", image->step, image.get());
-    auto msg_timestamp = image.get()->timestamp;
     auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(
       std::chrono::high_resolution_clock::now().time_since_epoch()).count();
 
+    auto logger = rclcpp::get_logger("image_transport_subscriber");
+    RCLCPP_INFO(
+      logger,
+      "Received message %zu on address %p", image->step, image.get());
+    auto msg_timestamp = image.get()->timestamp;
+
     auto diff = now - msg_timestamp;
+
     ++k_;
     average_round_time_ = ((k_ - 1) * average_round_time_ + diff) / k_;
     if (show_gui_) {
