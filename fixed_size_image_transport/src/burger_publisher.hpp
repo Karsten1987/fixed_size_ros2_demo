@@ -33,7 +33,7 @@ public:
     logger_(node->get_logger())
   {}
 
-  void run(double frequency)
+  void run(double frequency, bool loaning)
   {
     static size_t count = 0;
 
@@ -43,21 +43,43 @@ public:
       auto frame = burger_cap_.render_burger(width, height);
       auto frame_size = static_cast<size_t>(frame.step[0] * frame.rows);
 
-      auto image_msg = pub_->borrow_loaned_message();
-      auto msg_size = image_msg.get().data.size();
-      if (frame_size != msg_size) {
-        RCLCPP_ERROR(
-          logger_, "incompatible image sizes. frame %zu, msg %zu", frame_size, msg_size);
-        return;
+      if (loaning)
+      {
+        auto image_msg = pub_->borrow_loaned_message();
+        
+        auto msg_size = image_msg.get().data.size();
+        if (frame_size != msg_size) {
+          RCLCPP_ERROR(
+            logger_, "incompatible image sizes. frame %zu, msg %zu", frame_size, msg_size);
+          return;
+        }
+        image_msg.get().is_bigendian = false;
+        image_msg.get().step = ++count;
+        memcpy(image_msg.get().data.data(), frame.data, frame_size);
+
+        RCLCPP_INFO(logger_, "Publishing message %zu on address %p", count, &image_msg.get());
+
+        image_msg.get().timestamp = std::chrono::duration_cast<std::chrono::nanoseconds>(
+          std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+        
+        pub_->publish(std::move(image_msg));
       }
-      image_msg.get().is_bigendian = false;
-      image_msg.get().step = ++count;
-      memcpy(image_msg.get().data.data(), frame.data, frame_size);
-      image_msg.get().timestamp = std::chrono::duration_cast<std::chrono::nanoseconds>(
-        std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-      RCLCPP_INFO(logger_, "[%" PRId64 "]Publishing message %zu on address %p",
-        image_msg.get().timestamp, count, &image_msg.get());
-      pub_->publish(std::move(image_msg));
+      else
+      {
+        auto image_msg = MsgT();
+        
+        image_msg.is_bigendian = false;
+        image_msg.step = ++count;
+        memcpy(image_msg.data.data(), frame.data, frame_size);
+
+        RCLCPP_INFO(logger_, "Publishing message %zu", count);
+        
+        image_msg.timestamp = std::chrono::duration_cast<std::chrono::nanoseconds>(
+          std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+        
+        pub_->publish(image_msg);
+      }
+
       loop_rate.sleep();
     }
   }
