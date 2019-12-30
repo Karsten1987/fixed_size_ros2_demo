@@ -5,7 +5,7 @@ This is the demo code show cased at ROSCon 2019 featuring [rmw_iceoryx](https://
 ## Usage
 
 In order to leverage the full potential of zero-copy, we assume in the following that you use `rmw_iceoryx_cpp` as the underlying RMW implementation.
-That is, prefixing the commands below by `RMW_IMPLEMENTATION=rmw_iceoryx_cpp` or genereally setting the environment variable in its respective terminal.
+That is, prefixing the commands below by `RMW_IMPLEMENTATION=rmw_iceoryx_cpp` or generally setting the environment variable in its respective terminal.
 
 The application consists of two executables:
 * image_transport_publisher
@@ -39,6 +39,6 @@ ros2 run fixed_size_image_transport image_transport_publisher <frequency> <image
 ```
 The subscriber can then be started as such:
 ```
-ros2 run fixed_size_image_transport image_transport_subscriber <image_size> <--no-gui>
+ros2 run fixed_size_image_transport image_transport_subscriber <image_size> [--no-gui]
 ```
 The `--no-gui` arguments becomes handy when sending large image sizes to not display them with each callback.
