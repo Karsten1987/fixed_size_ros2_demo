@@ -56,7 +56,7 @@ int main(int argc, char ** argv)
     } else {
       RCLCPP_ERROR(
         node->get_logger(),
-        "unsupported loaing parameter: %s - choose from 'loaning', 'classic'", std::string(
+        "unsupported loaning parameter: %s - choose from 'loaning', 'classic'", std::string(
           argv[3]).c_str());
       return -1;
     }
