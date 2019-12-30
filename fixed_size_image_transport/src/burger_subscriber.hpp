@@ -29,7 +29,7 @@ public:
   BurgerSubscriber(std::shared_ptr<rclcpp::Node> node, std::string topic, bool show_gui = true)
   : sub_(node->create_subscription<MsgT>(
         topic,
-        rclcpp::SensorDataQoS(),
+        1,
         std::bind(&BurgerSubscriber<MsgT>::show_image, this, std::placeholders::_1))),
     node_(node),
     show_gui_(show_gui),
