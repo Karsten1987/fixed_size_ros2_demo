@@ -63,7 +63,7 @@ public:
       } else {
         auto image_msg = std::make_unique<MsgT>();
 
-        auto msg_size = image_msg.get().data.size();
+        auto msg_size = image_msg->data.size();
         if (frame_size != msg_size) {
           RCLCPP_ERROR(
             logger_, "incompatible image sizes. frame %zu, msg %zu", frame_size, msg_size);

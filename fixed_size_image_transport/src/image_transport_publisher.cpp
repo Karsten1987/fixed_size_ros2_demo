@@ -62,6 +62,9 @@ int main(int argc, char ** argv)
     }
   }
 
+  RCLCPP_INFO(
+    node->get_logger(),
+    "Transport method: %s\n", (loaning) ? "loaning messages" : "stack based messages");
 
   if (image_id == "VGA") {
     BurgerPublisher<fixed_size_msgs::msg::ImageVGA> pub(node, "imageVGA");
