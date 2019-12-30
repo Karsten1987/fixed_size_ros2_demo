@@ -49,19 +49,15 @@ int main(int argc, char ** argv)
   }
 
   if (argc >= 4) {
-    if ("loaning" == std::string(argv[3]))
-    {
+    if ("loaning" == std::string(argv[3])) {
       loaning = true;
-    }
-    else if ("classic" == std::string(argv[3]))
-    {
+    } else if ("classic" == std::string(argv[3])) {
       loaning = false;
-    }
-    else
-    {
+    } else {
       RCLCPP_ERROR(
-      node->get_logger(),
-      "unsupported loing parameter: %s - choose from 'loaning', 'classic'", std::string(argv[3]).c_str());
+        node->get_logger(),
+        "unsupported loaning parameter: %s - choose from 'loaning', 'classic'", std::string(
+          argv[3]).c_str());
       return -1;
     }
   }
